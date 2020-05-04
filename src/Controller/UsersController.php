@@ -3,10 +3,11 @@
 declare(strict_types=1);
 
 namespace App\Controller;
+require ROOT.'/vendor/autoload.php';
+
 
 /**
  * Users Controller
- *
  * @property \App\Model\Table\UsersTable $Users
  * @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
@@ -19,29 +20,14 @@ class UsersController extends AppController
      */
     public function index()
     {
-        $users = $this->paginate($this->Users);
-
+        $users = $this->paginate($this->Users->find('all', [
+            'contain' => ['Agenda'],
+        ]));
         $this->set(compact('users'));
     }
 
     /**
-     * View method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $user = $this->Users->get($id, [
-            'contain' => [],
-        ]);
-
-        $this->set('user', $user);
-    }
-    /**
-     * View method
-     *
+     * Login method
      * @return \Cake\Http\Response|null|void Renders view
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
@@ -57,16 +43,21 @@ class UsersController extends AppController
                     $user->password = $this->request->getData('password');
                     $this->Users->save($user);
                 }
-                return $this->redirect(['controller'=>'Pages','action'=>'display','home']);
+                return $this->redirect(['controller' => 'Pages', 'action' => 'display', 'home']);
+            } else {
+                $this->Flash->error('Usuario o contraseña incorrecta', ['clear' => true]);
+                return $this->redirect(['action' => 'login']);
             }
         }
         $this->set('user', $user);
-        $this->render('/Users/login');
     }
+    /**
+     * Logout Method
+     */
     public function logout()
     {
         $this->Auth->logout();
-        return $this->redirect(['controller'=>'Pages','action'=>'display','home']);
+        return $this->redirect(['controller' => 'Pages', 'action' => 'display', 'home']);
     }
     /**
      * Add method
@@ -81,17 +72,38 @@ class UsersController extends AppController
             $user->apellido = $this->request->getData('apellido');
             $user->mail = $this->request->getData('mail');
             $user->password = $this->request->getData('password');
+            $user->cedula = $this->request->getData('cedula');
             $user->tip_usu = '2';
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('El usuario ha sido creado exitosamente'),['key'=>'createUser','clear'=>true]);
-                return $this->redirect(['controller'=>'Pages','action'=>'display','home']);
+            $bool = $this->Users->find()->where(['mail' => $this->request->getData('mail')]);
+            if ($bool->isEmpty()) {
+                if ($this->Users->save($user)) {
+                    $this->Auth->setUser($user);
+                    $this->Flash->success(__('El usuario ha sido creado exitosamente'), ['clear' => true]);
+                    return $this->redirect(['controller' => 'Pages', 'action' => 'display', 'home']);
+                } else {
+                    $this->Flash->error(__('The user could not be saved. Please, try again.'), ['clear' => true]);
+                }
+            } else {
+                $this->Flash->error('Existe un usuario con ese Email', ['clear' => true]);
             }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $this->set(compact('user'));
-        $this->render('/Users/create'); 
+        $this->render('/Users/create');
     }
-
+    /**
+     * Add method
+     *
+     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
+     */
+    public function account()
+    {
+        $users = $this->Users->get($this->Auth->user('id'), [
+            'contain' => [],
+        ]);
+        $this->viewBuilder()->setLayout('user');
+        $this->set(compact('users'));
+        $this->render('/Users/account');
+    }
     /**
      * Edit method
      *
@@ -114,25 +126,5 @@ class UsersController extends AppController
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $this->set(compact('user'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $user = $this->Users->get($id);
-        if ($this->Users->delete($user)) {
-            $this->Flash->success(__('The user has been deleted.'));
-        } else {
-            $this->Flash->error(__('The user could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
     }
 }

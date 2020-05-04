@@ -18,8 +18,9 @@ class Agenda1Controller extends AppController
      */
     public function index()
     {
-        $agenda1 = $this->paginate($this->Agenda1);
-
+        $agenda1 = $this->paginate($this->Agenda1->find('all',[
+            'contain' => ['Users'],
+        ]));
         $this->set(compact('agenda1'));
     }
 

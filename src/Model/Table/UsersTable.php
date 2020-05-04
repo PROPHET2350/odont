@@ -83,6 +83,12 @@ class UsersTable extends Table
             ->requirePresence('tip_usu', 'create')
             ->notEmptyString('tip_usu');
 
+        $validator
+            ->scalar('cedula')
+            ->maxLength('cedula', 15)
+            ->requirePresence('cedula', 'create')
+            ->notEmptyString('cedula');
+
         return $validator;
     }
 }

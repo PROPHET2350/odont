@@ -14,6 +14,10 @@ use Cake\Auth\DefaultPasswordHasher;
  * @property string $mail
  * @property string $password
  * @property int $tip_usu
+ * @property string $cedula
+ *
+ * @property \App\Model\Entity\Agenda[] $agenda
+ * @property \App\Model\Entity\Agenda1[] $agenda1
  */
 class User extends Entity
 {
@@ -32,6 +36,9 @@ class User extends Entity
         'mail' => true,
         'password' => true,
         'tip_usu' => true,
+        'cedula' => true,
+        'agenda' => true,
+        'agenda1' => true,
     ];
 
     /**
@@ -48,5 +55,5 @@ class User extends Entity
           return (new DefaultPasswordHasher)->hash($password);
         }
     }
-
+    
 }

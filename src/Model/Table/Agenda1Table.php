@@ -40,6 +40,10 @@ class Agenda1Table extends Table
         $this->setTable('agenda1');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
+        $this->belongsTo('Users',[
+            'foreignKey'=>'id_user',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**

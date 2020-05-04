@@ -3,9 +3,6 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\User $user
  */
-
-use Cake\Routing\Router;
-
 ?>
 <div class="container-contact100">
 		<div class="wrap-contact100">
@@ -23,7 +20,10 @@ use Cake\Routing\Router;
                     <?= $this->Form->text('apellido',['class'=>'input100','placeholder'=>'Apellido','label'=>false])?>
 					<span class="focus-input100"></span>
 				</div>
-
+				<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+                    <?= $this->Form->number('cedula',['class'=>'input100','placeholder'=>'Cedula','label'=>false])?>
+					<span class="focus-input100"></span>
+				</div>
 				<label class="label-input100" for="email">Introduce tu correo electrónico</label>
 				<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
                     <?= $this->Form->email('mail',['class'=>'input100','placeholder'=>'Correo','label'=>false])?>
@@ -92,7 +92,4 @@ use Cake\Routing\Router;
 			</div>
 		</div>
 	</div>
-
-
-
 	<div id="dropDownSelect1"></div>

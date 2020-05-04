@@ -126,7 +126,6 @@ if ($isCli) {
 } else {
     (new ErrorHandler(Configure::read('Error')))->register();
 }
-
 /*
  * Include the CLI bootstrap overrides.
  */

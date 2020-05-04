@@ -3,12 +3,9 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\User $user
  */
-
-use Cake\Routing\Router;
-
 ?>
-<div class="container  mt-5">
-    <div class="row  mt-5">
+<div class="container mt-5">
+    <div class="row mt-5">
         <div class="col-md-4 m-auto">
             <div class="card">
                 <div class="card-header">
@@ -17,7 +14,7 @@ use Cake\Routing\Router;
                     </h4>
                 </div>
                 <div class="card-body">
-                    <?= $this->Form->create($user,['url' => ['controller' => 'Users','action'=>'login']]) ?>
+                    <?= $this->Form->create(null,['url' => ['controller' => 'Users','action'=>'login']]) ?>
                     <div class="form-group">
                         <?= $this->Form->text('mail',['class'=>'form-control','placeholder'=>'Email Address']) ?>
                     </div>

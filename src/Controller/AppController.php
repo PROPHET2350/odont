@@ -50,6 +50,9 @@ class AppController extends Controller
                     'userModel' => 'Users'
                 ],
             ],
+            'flash'=>['element'=>'warning'],
+            'storage' => 'Session',
+            'authError' => 'No tiene permiso para acceder a esta direccion',
             'LoginAction' =>[
                 'controller'=>'Users',
                 'action'=>'login'

@@ -42,6 +42,7 @@
     <link rel="stylesheet" href="css/owl.carousel.css" />
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/animate.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 </head>
 
 <body>
@@ -81,7 +82,7 @@
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="Admin">Admin View</a>
                             <?php } else{ ?>
-                            <a class="dropdown-item" href="#">Mi cuenta</a>
+                            <?=$this->Html->link('Mi cuenta', ['controller' => 'Users', 'action' => 'account','class'=>'dropdown-item'])?>
                             <div class="dropdown-divider"></div>
                             <?=$this->Html->link('Cerrar sesion', ['controller' => 'Users', 'action' => 'logout','class'=>'dropdown-item'])?>
                            <?php } ?>
@@ -242,7 +243,9 @@
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/circle-progress.min.js"></script>
     <script src="js/main.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <?=$this->Flash->render()?>          
+                 
 </body>
 
 </html>
