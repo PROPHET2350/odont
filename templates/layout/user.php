@@ -29,6 +29,7 @@ use Cake\Routing\Router;
     <link href="../img/favicon.ico" rel="shortcut icon" />
     <!-- Custom styles for this template-->
     <link href="../User/css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <title>
         <?= $this->fetch('title') ?>
     </title>
@@ -36,7 +37,6 @@ use Cake\Routing\Router;
 </head>
 
 <body id="page-top">
-
   <!-- Page Wrapper -->
   <div id="wrapper">
 
@@ -44,11 +44,11 @@ use Cake\Routing\Router;
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon rotate-n-15">
-          <i class="fas fa-laugh-wink"></i>
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?=Router::url(['controller' => 'Pages', 'action' => 'display', 'home'])?>">
+        <div class="sidebar-brand-icon">
+          <i class="fas fa-tooth"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+        <div class="sidebar-brand-text mx-3">Odonto</div>
       </a>
 
       <!-- Divider -->
@@ -57,7 +57,7 @@ use Cake\Routing\Router;
       <!-- Nav Item - Dashboard -->
       <li class="nav-item active">
         <a class="nav-link" href="index.html">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <i class="fas fa-home"></i>
           <span>Dashboard</span></a>
       </li>
 
@@ -93,10 +93,7 @@ use Cake\Routing\Router;
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Utilities:</h6>
-            <a class="collapse-item" href="utilities-color.html">Colors</a>
-            <a class="collapse-item" href="utilities-border.html">Borders</a>
-            <a class="collapse-item" href="utilities-animation.html">Animations</a>
-            <a class="collapse-item" href="utilities-other.html">Other</a>
+            <?=$this->Html->link('Change Password',['controller'=>'Users','action'=>'unique'],['class'=>'collapse-item'])?>
           </div>
         </div>
       </li>
@@ -314,7 +311,7 @@ use Cake\Routing\Router;
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?=$this->fetch('nombre')?></span>
-                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                <i class="fas fa-user-circle fa-2x"></i>
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -391,7 +388,7 @@ use Cake\Routing\Router;
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-body">Seleccione "Logout" a continuación si está listo para finalizar su sesión actual.</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
           <a class="btn btn-primary" href="<?=Router::url(['controller' => 'Users', 'action' => 'logout'])?>">Logout</a>
@@ -416,6 +413,8 @@ use Cake\Routing\Router;
   <!-- Page level custom scripts -->
   <script src="../User/js/demo/chart-area-demo.js"></script>
   <script src="../User/js/demo/chart-pie-demo.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <?=$this->Flash->render()?>   
 
 </body>
 

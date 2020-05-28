@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 require ROOT.'/vendor/autoload.php';
-
+use Cake\Http\Session\DatabaseSession;
 
 /**
  * Users Controller
@@ -13,6 +13,7 @@ require ROOT.'/vendor/autoload.php';
  */
 class UsersController extends AppController
 {
+    
     /**
      * Index method
      *
@@ -104,6 +105,32 @@ class UsersController extends AppController
         $this->set(compact('users'));
         $this->render('/Users/account');
     }
+    public function change()
+    {
+        $users = $this->Users->get($this->Auth->user('id'), [
+            'contain' => [],
+        ]);
+        if ($this->request->is('post')) {
+            $session = $this->getRequest()->getSession();
+            if ($this->request->getData('key')==$session->read('unique')) {
+                $users->password = $this->request->getData('pass');
+                if ($this->Users->save($users)) {
+                    $this->Flash->success('Contraseña Cambiada');
+                    $this->Auth->logout();
+                    return $this->redirect(['action' => 'login']);
+                } else {
+                    # code...
+                }
+                
+            } else {
+                $this->Flash->error('fuck u');
+                return $this->redirect($this->referer());
+            }
+            
+        }
+        $this->set(compact('users'));
+        $this->render('/Users/change');
+    }
     /**
      * Edit method
      *
@@ -117,14 +144,42 @@ class UsersController extends AppController
             'contain' => [],
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->getData());
-            if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            $bool = $this->Users->find()->where(['mail' => $this->request->getData('mail')]);
+           if ($user->mail == $this->request->getData('mail') || $bool->isEmpty()) {
+                $user->nombre = $this->request->getData('nombre');
+                $user->apellido = $this->request->getData('apellido');
+                $user->cedula = $this->request->getData('cedula');
+                $user->mail = $this->request->getData('mail');
+                if ($this->Users->save($user)) {
+                    $this->Flash->success('Los datos se han actualizado', ['clear' => true]);
+                    $this->redirect($this->referer());
+                } else {
+                    $this->Flash->error('Algo va mal', ['clear' => true]);
+                    $this->redirect($this->referer());
+                }
+           } else {
+                $this->Flash->error('Existe un usuario con ese Email', ['clear' => true]);
+                $this->redirect($this->referer());
+           }
+           
         }
         $this->set(compact('user'));
+    }
+    public function unique()
+    {
+        $this->loadComponent('Email');
+        $unique = uniqid();
+        $session = $this->getRequest()->getSession();
+        $session->write('unique',$unique);
+        $to = $this->Auth->user('mail');
+        $subject = 'Buenas, Cambio de password';
+        $message = 'Nothing much. Just test out my Email Component using PHPMailer.<br/>';
+        $message .= "<h3>$unique</h3>";
+        try {
+            $mail = $this->Email->send_mail($to, $subject, $message);
+            return $this->redirect(['action'=>'change']);
+        } catch (\Throwable $th) {
+            
+        }
     }
 }

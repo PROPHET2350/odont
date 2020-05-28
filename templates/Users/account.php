@@ -11,23 +11,23 @@ $this->assign('nombre', $users->nombre . ' ' . $users->apellido);
 <div class="container">
     <div class="row">
         <div class="col-md-4 m-auto">
-            <form action="">
+            <?=$this->Form->create($users,['url'=>['controller'=>'Users','action'=>'edit',$users->id]])?>
                 <div class="form-group">
-                <input type="text" name="" class="form-control" value="<?=$users->nombre?>">
+                    <?=$this->Form->text('nombre',['class'=>'form-control','required','value'=>$users->nombre])?>
                 </div>
                 <div class="form-group">
-                    <input type="text" name="" class="form-control" value="<?=$users->apellido?>">
+                    <?=$this->Form->text('apellido',['class'=>'form-control','required','value'=>$users->apellido])?>
                 </div>
                 <div class="form-group">
-                    <input type="text" name="" class="form-control" value="<?=$users->cedula?>">
+                    <?=$this->Form->number('cedula',['class'=>'form-control','required','value'=>$users->cedula])?>
                 </div>
                 <div class="form-group">
-                    <input type="text" name="" class="form-control" value="<?=$users->mail?>">
+                    <?=$this->Form->mail('mail',['class'=>'form-control','required','value'=>$users->mail])?>
                 </div>
                 <div class="form-group">
                     <input type="submit" class="btn btn-outline-warning btn-block" name="" value="Update">
                 </div>
-            </form>
+            <?=$this->Form->end()?>
         </div>
     </div>
 </div>
